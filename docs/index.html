@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rally Register</title>
+<meta name="description" content="The EP Asset Management team's table tennis ladder: log matches, track Elo ratings and head-to-head records.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230C3957'/%3E%3Crect x='15' y='4' width='2' height='24' fill='%23ffffff' opacity='.5'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%232490B8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: navy table-top hero with the one action, three cards (access, how to record, rules), navy footer bar. EP brand, light only. */
+:root {
+  --navy: #0C3957;
+  --navy-deep: #0F253F;
+  --blue: #2490B8;
+  --blue-ink: #00587C;
+  --text: #404041;
+  --dark: #263B46;
+  --muted: #6E8084;
+  --page: #F5F7F8;
+  --card: #EEF2F4;
+  --surface: #FFFFFF;
+  --line: #D5DEE3;
+  --on-navy-soft: rgba(255, 255, 255, .76);
+  --font-head: "Montserrat", "Avenir Next LT Pro", Arial, sans-serif;
+  --font-body: "Source Sans 3", "Avenir Next LT Pro", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--page); }
+body { margin: 0; background: var(--page); color: var(--text); font-family: var(--font-body); font-size: 16px; line-height: 1.55;
+  padding-top: env(safe-area-inset-top, 0px); }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 24px 0; display: grid; gap: 20px; min-height: 100vh; grid-template-rows: auto auto 1fr auto; }
+h1, h2 { font-family: var(--font-head); font-weight: 700; margin: 0; line-height: 1.2; text-wrap: balance; }
+h2 { font-size: 1.15rem; color: var(--navy-deep); }
+p { margin: 0; }
+b, strong { font-weight: 700; color: var(--navy); }
+a { color: var(--blue-ink); }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.eyebrow { font-size: .74rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+
+/* Hero, drawn as a table top: white edge line and centre line */
+.hero {
+  background: var(--navy); color: #fff; border-radius: 10px; position: relative; overflow: hidden; padding: 44px 40px 40px;
+  outline: 2px solid rgba(255, 255, 255, .85); outline-offset: -10px;
+  display: grid; gap: 14px; justify-items: start;
+}
+.hero::before { content: ""; position: absolute; top: 10px; bottom: 10px; left: 50%; width: 2px; background: rgba(255, 255, 255, .22); }
+.hero > * { position: relative; }
+.hero .eyebrow { color: var(--on-navy-soft); }
+.hero h1 { font-size: clamp(2.3rem, 6vw, 3.6rem); color: #fff; }
+.hero h1 em { color: var(--blue); font-style: italic; }
+.hero p { color: var(--on-navy-soft); max-width: 46ch; font-size: 1.08rem; }
+.cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 8px; background: #fff; color: var(--navy); text-decoration: none;
+  font-family: var(--font-head); font-weight: 600; padding: 13px 22px; border-radius: 6px; }
+.cta:hover { background: var(--card); }
+.cta:focus-visible { outline-color: #fff; }
+.hero small { color: var(--on-navy-soft); font-size: .9rem; }
+.hero small b { color: #fff; }
+@media (max-width: 560px) { .hero { padding: 34px 24px 30px; } .hero::before { display: none; } }
+
+.live { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; }
+.live code { font-family: Consolas, "Cascadia Mono", monospace; font-size: .92rem; color: var(--navy); overflow-wrap: anywhere; user-select: all; }
+.copy { border: 1px solid #AFC0C7; background: var(--surface); color: var(--navy); border-radius: 6px; padding: 5px 12px; font: 600 .82rem var(--font-head); cursor: pointer; }
+.copy:hover { background: var(--card); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; align-items: start; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px 22px; display: grid; gap: 12px; min-width: 0; }
+.card.accent { border-top: 5px solid var(--blue); }
+.card ul, .card ol { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.card li::marker { color: var(--blue-ink); font-family: var(--font-head); font-weight: 700; }
+
+.footbar { background: var(--navy); color: var(--on-navy-soft); border-radius: 11px 11px 0 0; padding: 16px 22px calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 20px; font-size: .92rem; }
+.footbar strong { color: #fff; font-family: var(--font-head); font-weight: 600; }
+.footbar a { color: #fff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="eyebrow">EP Asset Management · Table tennis</div>
+    <h1>Rally <em>Register</em></h1>
+    <p>The asset management team's table tennis ladder. Log every match, track ratings and see who runs the table.</p>
+    <a class="cta" href="https://claude.ai/artifact/8998AXCxmqThWcRTNDrZYB" target="_blank" rel="noopener">Open Rally Register <span aria-hidden="true">→</span></a>
+    <small>Opens on claude.ai. Sign in with your <b>Energy Partners</b> account.</small>
+  </header>
+
+  <div class="live">
+    <span class="eyebrow">Live link</span>
+    <code id="live-url">https://claude.ai/artifact/8998AXCxmqThWcRTNDrZYB</code>
+    <button type="button" class="copy" id="copy">Copy</button>
+  </div>
+
+  <main class="cards">
+    <section class="card accent" aria-labelledby="c1">
+      <h2 id="c1">Before you start</h2>
+      <ul>
+        <li>You need a <b>Claude account</b> in the Energy Partners organisation.</li>
+        <li>If the page says you don't have access, ask the register owner to share it with you as a <b>Contributor</b>. Viewers can see the table but can't record results.</li>
+        <li>Bookmark the live link above so the register is one click away.</li>
+      </ul>
+    </section>
+    <section class="card" aria-labelledby="c2">
+      <h2 id="c2">Record a match</h2>
+      <ol>
+        <li>Add yourself under <b>Players</b> with your name and surname.</li>
+        <li>In <b>Record a match</b>, pick both players and set how many games you played.</li>
+        <li>Enter the score for each game. The winner is worked out for you.</li>
+        <li>Select <b>Save result</b>. The leaderboard updates for everyone straight away.</li>
+      </ol>
+    </section>
+    <section class="card" aria-labelledby="c3">
+      <h2 id="c3">The rules</h2>
+      <ul>
+        <li>Every game goes to <b>11</b>. From 10–10 you need a <b>2-point lead</b>.</li>
+        <li>Play as many games as you like. <b>Most games won</b> takes the match; a level score needs a decider.</li>
+        <li>Ratings start at <b>1000</b> and move after every match (Elo, K = 32). Beating a higher-rated player earns you more.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footbar">
+    <span><strong>Energy Partners</strong> · Asset Management</span>
+    <a href="https://github.com/Tjaartz/rally-register">Source on GitHub</a>
+  </footer>
+</div>
+<script>
+  document.getElementById("copy").addEventListener("click", async (e) => {
+    const btn = e.currentTarget, text = document.getElementById("live-url").textContent;
+    try { await navigator.clipboard.writeText(text); btn.textContent = "Copied"; }
+    catch { const r = document.createRange(); r.selectNodeContents(document.getElementById("live-url")); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Press Ctrl+C"; }
+    setTimeout(() => (btn.textContent = "Copy"), 2000);
+  });
+</script>
+</body>
+</html>
