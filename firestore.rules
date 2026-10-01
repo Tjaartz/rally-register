@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // A browser becomes a member by proving it knows the team password once.
+    // Template only: the real password lives in the Firebase console, never in this repo.
+    function isMember() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/members/$(request.auth.uid));
+    }
+
+    match /members/{uid} {
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['password', 'joinedAt'])
+        && request.resource.data.password == 'CHANGE-ME';
+    }
+
+    match /players/{id} {
+      allow read, delete: if isMember();
+      allow create: if isMember()
+        && request.resource.data.keys().hasOnly(['name', 'createdAt'])
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 60;
+    }
+
+    match /matches/{id} {
+      allow read, delete: if isMember();
+      allow create: if isMember()
+        && request.resource.data.keys().hasOnly(['a', 'b', 'sets', 'winner', 'playedOn', 'createdAt'])
+        && request.resource.data.a is string
+        && request.resource.data.b is string
+        && request.resource.data.a != request.resource.data.b
+        && request.resource.data.winner in [request.resource.data.a, request.resource.data.b]
+        && request.resource.data.sets is list
+        && request.resource.data.sets.size() >= 1
+        && request.resource.data.sets.size() <= 15
+        && request.resource.data.playedOn is string;
+    }
+  }
+}
